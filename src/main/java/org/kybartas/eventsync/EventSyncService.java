@@ -15,20 +15,6 @@ public class EventSyncService {
         this.feedbackRepository = feedbackRepository;
     }
 
-    public Event createEvent(String title, String description) {
-
-        Event event = new Event();
-        event.setTitle(title);
-        event.setDescription(description);
-
-        return eventRepository.save(event);
-    }
-
-    public List<Event> getEvents() {
-
-        return eventRepository.findAll();
-    }
-
     public Feedback addFeedback(long eventId, String text) {
 
         Event event = eventRepository.findById(eventId).orElseThrow();
@@ -41,17 +27,15 @@ public class EventSyncService {
         return feedbackRepository.save(feedback);
     }
 
-    public List<String> getSummary(long eventId) {
+    public SummaryDto getSummary(long eventId) {
 
         List<Feedback> eventFeedback = feedbackRepository.findAllByEvent_Id(eventId);
-        List<String> summary = new ArrayList<>();
+        List<String> sentiments = new ArrayList<>();
 
         for(Feedback feedback : eventFeedback) {
-            summary.add(feedback.getSentiment());
+            sentiments.add(feedback.getSentiment());
         }
 
-        summary.add(0, "Feedback count: " + summary.size());
-
-        return summary;
+        return new SummaryDto(sentiments);
     }
 }

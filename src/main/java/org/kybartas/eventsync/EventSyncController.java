@@ -3,28 +3,29 @@ package org.kybartas.eventsync;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/eventSync")
 public class EventSyncController {
 
     private final EventSyncService service;
-    public EventSyncController(EventSyncService service) {
+    private final EventRepository eventRepository;
+    public EventSyncController(EventSyncService service, EventRepository eventRepository) {
         this.service = service;
+        this.eventRepository = eventRepository;
     }
 
     @PostMapping("/events")
     public ResponseEntity<?> createEvent(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description) {
+            @RequestBody Event event) {
 
-        Event newEvent = service.createEvent(title, description);
-        return ResponseEntity.ok(newEvent);
+        return ResponseEntity.ok(eventRepository.save(event));
     }
 
     @GetMapping("/events")
     public ResponseEntity<?> getEvents() {
 
-        return ResponseEntity.ok(service.getEvents());
+        return ResponseEntity.ok(eventRepository.findAll());
     }
 
     @PostMapping("events/{eventId}/feedback")
