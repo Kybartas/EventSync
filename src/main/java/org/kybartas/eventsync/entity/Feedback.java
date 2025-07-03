@@ -1,8 +1,9 @@
-package org.kybartas.eventsync;
+package org.kybartas.eventsync.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 public class Feedback {
@@ -11,8 +12,12 @@ public class Feedback {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Schema(example = "There is no way that this space math will have any practical use.")
     private String text;
-    private LocalDateTime timeStamp;
+
+    private LocalDate timeStamp;
+
+    @Schema(example = "negative")
     private String sentiment;
 
     @ManyToOne
@@ -20,7 +25,7 @@ public class Feedback {
 
     @PrePersist
     public void generateTimeStamp() {
-        this.timeStamp = LocalDateTime.now();
+        this.timeStamp = LocalDate.now();
     }
 
     public Feedback() {};
@@ -39,10 +44,10 @@ public class Feedback {
         return text;
     }
 
-    public void setTimeStamp(LocalDateTime timeStamp) {
+    public void setTimeStamp(LocalDate timeStamp) {
         this.timeStamp = timeStamp;
     }
-    public LocalDateTime getTimeStamp() {
+    public LocalDate getTimeStamp() {
         return timeStamp;
     }
 

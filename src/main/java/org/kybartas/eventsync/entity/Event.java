@@ -1,5 +1,6 @@
-package org.kybartas.eventsync;
+package org.kybartas.eventsync.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,10 +10,13 @@ import jakarta.persistence.Id;
 public class Event {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Schema(example = "Physics Conference 1665")
     private String title;
+
+    @Schema(example = "Isaac Newton explains movement of celestial bodies")
     private String description;
 
     public Event() {};

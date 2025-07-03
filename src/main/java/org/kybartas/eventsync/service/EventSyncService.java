@@ -1,5 +1,10 @@
-package org.kybartas.eventsync;
+package org.kybartas.eventsync.service;
 
+import org.kybartas.eventsync.dto.SummaryDto;
+import org.kybartas.eventsync.entity.Event;
+import org.kybartas.eventsync.entity.Feedback;
+import org.kybartas.eventsync.repository.EventRepository;
+import org.kybartas.eventsync.repository.FeedbackRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;

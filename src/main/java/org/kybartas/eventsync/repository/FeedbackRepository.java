@@ -1,5 +1,6 @@
-package org.kybartas.eventsync;
+package org.kybartas.eventsync.repository;
 
+import org.kybartas.eventsync.entity.Feedback;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

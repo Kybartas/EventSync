@@ -1,4 +1,4 @@
-package org.kybartas.eventsync;
+package org.kybartas.eventsync.dto;
 
 import java.util.List;
 
