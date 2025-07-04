@@ -1,22 +1,29 @@
 package org.kybartas.eventsync.dto;
 
-import java.util.List;
-
 public class SummaryDto {
 
-    private final int count;
-    private final List<String> sentiments;
+    private final int total;
+    private final int positive;
+    private final int neutral;
+    private final int negative;
 
-    public SummaryDto(List<String> sentiments) {
-        this.count = sentiments.size();
-        this.sentiments = sentiments;
+    public SummaryDto(int total, int positive, int neutral, int negative) {
+        this.total = total;
+        this.positive = positive;
+        this.neutral = neutral;
+        this.negative = negative;
     }
 
-    public int getCount() {
-        return count;
+    public int getTotal() {
+        return total;
     }
-
-    public List<String> getSentiments() {
-        return sentiments;
+    public int getPositive() {
+        return positive;
+    }
+    public int getNeutral() {
+        return neutral;
+    }
+    public int getNegative() {
+        return negative;
     }
 }

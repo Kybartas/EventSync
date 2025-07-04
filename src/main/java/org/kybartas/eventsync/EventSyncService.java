@@ -1,5 +1,6 @@
-package org.kybartas.eventsync.service;
+package org.kybartas.eventsync;
 
+import org.kybartas.eventsync.dto.EventDto;
 import org.kybartas.eventsync.dto.SummaryDto;
 import org.kybartas.eventsync.entity.Event;
 import org.kybartas.eventsync.entity.Feedback;
@@ -11,8 +12,8 @@ import org.springframework.http.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -23,6 +24,19 @@ public class EventSyncService {
     public EventSyncService(EventRepository eventRepository, FeedbackRepository feedbackRepository) {
         this.eventRepository = eventRepository;
         this.feedbackRepository = feedbackRepository;
+    }
+
+    public Event createEvent(EventDto eventData) {
+
+        Event event = new Event();
+        event.setTitle(eventData.getTitle());
+        event.setDescription(eventData.getDescription());
+        return event;
+    }
+
+    public List<Event> getEvents() {
+
+        return eventRepository.findAll();
     }
 
     public Feedback addFeedback(long eventId, String text) {
@@ -40,13 +54,22 @@ public class EventSyncService {
     public SummaryDto getSummary(long eventId) {
 
         List<Feedback> eventFeedback = feedbackRepository.findAllByEvent_Id(eventId);
-        List<String> sentiments = new ArrayList<>();
+        int total = 0, positive = 0, neutral = 0, negative = 0;
 
         for(Feedback feedback : eventFeedback) {
-            sentiments.add(feedback.getSentiment());
+            String sentiment = feedback.getSentiment();
+
+            total = total + 1;
+            if (Objects.equals(sentiment, "positive")) {
+                positive = positive + 1;
+            } else if (Objects.equals(sentiment, "neutral")) {
+                neutral = neutral + 1;
+            } else if (Objects.equals(sentiment, "negative")) {
+                negative = negative + 1;
+            }
         }
 
-        return new SummaryDto(sentiments);
+        return new SummaryDto(total, positive, neutral, negative);
     }
 
     // external api response looks like this:
