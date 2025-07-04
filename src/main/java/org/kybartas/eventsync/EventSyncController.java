@@ -38,7 +38,7 @@ public class EventSyncController {
     }
 
     @PostMapping(value = "events/{eventId}/feedback", consumes = "text/plain")
-    public ResponseEntity<Feedback> handleFeedback(
+    public ResponseEntity<Feedback> addFeedback(
             @PathVariable String eventId,
             @RequestBody String text) {
 
@@ -47,7 +47,7 @@ public class EventSyncController {
     }
 
     @GetMapping("events/{eventId}/summary")
-    public ResponseEntity<SummaryDto> returnSummary(
+    public ResponseEntity<SummaryDto> getSummary(
             @PathVariable String eventId) {
 
         SummaryDto summary = service.getSummary(Long.parseLong(eventId));

@@ -64,11 +64,11 @@ public class EventSyncService {
 
     public SummaryDto getSummary(long eventId) {
 
-        List<Feedback> eventFeedback = feedbackRepository.findAllByEvent_Id(eventId);
-
-        if(eventFeedback.isEmpty()) {
-            throw new NoSuchElementException("No feedback found for given eventId");
+        if (!eventRepository.existsById(eventId)) {
+            throw new IllegalArgumentException("Event for id doesnt exist");
         }
+
+        List<Feedback> eventFeedback = feedbackRepository.findAllByEvent_Id(eventId);
 
         int total = 0, positive = 0, neutral = 0, negative = 0;
         for(Feedback feedback : eventFeedback) {
