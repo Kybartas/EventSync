@@ -31,7 +31,7 @@ public class EventSyncService {
         Event event = new Event();
         event.setTitle(eventData.getTitle());
         event.setDescription(eventData.getDescription());
-        return event;
+        return eventRepository.save(event);
     }
 
     public List<Event> getEvents() {

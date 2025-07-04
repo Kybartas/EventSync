@@ -5,8 +5,10 @@ export interface Event {
 }
 
 export interface Summary {
-    count: number
-    sentiments: string[]
+    total: number
+    positive: number;
+    neutral: number;
+    negative: number;
 }
 
 export const service = {
