@@ -22,7 +22,7 @@ public class EventSyncController {
         this.service = service;
     }
 
-    @PostMapping(value = "/events")
+    @PostMapping(value = "/events", consumes = "application/json")
     public ResponseEntity<Event> createEvent(
             @RequestBody EventDto eventDto) {
 
@@ -37,7 +37,7 @@ public class EventSyncController {
         return ResponseEntity.ok(events);
     }
 
-    @PostMapping(value = "events/{eventId}/feedback")
+    @PostMapping(value = "events/{eventId}/feedback", consumes = "text/plain")
     public ResponseEntity<Feedback> handleFeedback(
             @PathVariable String eventId,
             @RequestBody String text) {

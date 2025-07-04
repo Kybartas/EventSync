@@ -29,7 +29,6 @@ export const service = {
 
     getEvents: async (): Promise<Event[]> => {
 
-        // GET by default
         const response = await fetch("http://localhost:8080/eventSync/events");
         return await response.json();
     },
@@ -38,7 +37,7 @@ export const service = {
 
         await fetch(`http://localhost:8080/eventSync/events/${eventId}/feedback`, {
             method: "Post",
-            headers: { "Content-type": "application/json"},
+            headers: { "Content-type": "text/plain"},
             body: feedback
         });
     },

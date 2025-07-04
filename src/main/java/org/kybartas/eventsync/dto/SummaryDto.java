@@ -1,5 +1,8 @@
 package org.kybartas.eventsync.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "To return a clean 4-param json with feedback summary")
 public class SummaryDto {
 
     private final int total;

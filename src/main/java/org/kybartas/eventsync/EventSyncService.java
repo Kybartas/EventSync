@@ -13,14 +13,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
-
 
 @Service
 public class EventSyncService {
 
     private final EventRepository eventRepository;
     private final FeedbackRepository feedbackRepository;
+
     public EventSyncService(EventRepository eventRepository, FeedbackRepository feedbackRepository) {
         this.eventRepository = eventRepository;
         this.feedbackRepository = feedbackRepository;
@@ -28,9 +29,14 @@ public class EventSyncService {
 
     public Event createEvent(EventDto eventData) {
 
+        if(eventData.getTitle().isEmpty() || eventData.getDescription().isEmpty()) {
+            throw new IllegalArgumentException("Event title and description are required");
+        }
+
         Event event = new Event();
         event.setTitle(eventData.getTitle());
         event.setDescription(eventData.getDescription());
+
         return eventRepository.save(event);
     }
 
@@ -41,9 +47,14 @@ public class EventSyncService {
 
     public Feedback addFeedback(long eventId, String text) {
 
-        Event event = eventRepository.findById(eventId).orElseThrow();
-        Feedback feedback = new Feedback();
+        if(text.isEmpty()) {
+            throw new IllegalArgumentException("Feedback text is required");
+        }
 
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException("Event for id doesnt exist"));
+
+        Feedback feedback = new Feedback();
         feedback.setEvent(event);
         feedback.setText(text);
         feedback.setSentiment(fetchSentiment(text));
@@ -54,11 +65,15 @@ public class EventSyncService {
     public SummaryDto getSummary(long eventId) {
 
         List<Feedback> eventFeedback = feedbackRepository.findAllByEvent_Id(eventId);
+
+        if(eventFeedback.isEmpty()) {
+            throw new NoSuchElementException("No feedback found for given eventId");
+        }
+
         int total = 0, positive = 0, neutral = 0, negative = 0;
-
         for(Feedback feedback : eventFeedback) {
-            String sentiment = feedback.getSentiment();
 
+            String sentiment = feedback.getSentiment();
             total = total + 1;
             if (Objects.equals(sentiment, "positive")) {
                 positive = positive + 1;
