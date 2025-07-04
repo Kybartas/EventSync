@@ -1,14 +1,21 @@
+import {useState} from "react";
+import {service} from "../service";
+
 type Props = {
-    title: string;
-    description: string;
-    setTitle: (title: string) => void;
-    setDescription: (description: string) => void;
-    onCancel: () => void;
-    onConfirm: () => void;
+    close: () => void;
 }
 
-
 export function CreateEvent(props: Props) {
+
+    const [title, setTitle] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
+
+    const handleCreateEvent = async () => {
+
+        await service.createEvent(title, description);
+        props.close();
+    }
+
     return (
         <div className="component">
 
@@ -16,18 +23,18 @@ export function CreateEvent(props: Props) {
 
             <label>
             Title
-                <input type="text" value={props.title} onChange={(e) => props.setTitle(e.target.value)}/>
+                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
             </label>
             <label>
                 Description
-                <input type="text" value={props.description} onChange={(e) => props.setDescription(e.target.value)}/>
+                <input type="text" value={description} onChange={(e) => setDescription(e.target.value)}/>
             </label>
 
             <div className="bottom-buttons">
-                <button className="button" onClick={props.onCancel}>
+                <button className="button" onClick={props.close}>
                     Cancel
                 </button>
-                <button className="button" onClick={props.onConfirm}>
+                <button className="button" onClick={handleCreateEvent}>
                     Confirm
                 </button>
             </div>
