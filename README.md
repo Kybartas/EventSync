@@ -19,7 +19,7 @@
     cd EventSync
     ```
 
-3. **Start the application**
+3. **Start the application (make sure Docker desktop is running)**
    ```bash
    docker compose up --build
    ```
