@@ -44,4 +44,4 @@ Password: `password`
 
 URL: `https://eventsync.up.railway.app` (no front-end deployed)
 
-[postman collection to test public api](undefined/workspace/eventsync/collection/44482661-945aab67-bed8-4cd2-81d3-180ad397a68b?action=share&creator=44482661)
+To communicate with public api check the [postman collection](https://www.postman.com/kristijonaskybartas/workspace/eventsync/collection/44482661-945aab67-bed8-4cd2-81d3-180ad397a68b?action=share&creator=44482661)
