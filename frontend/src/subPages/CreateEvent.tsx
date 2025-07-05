@@ -18,11 +18,10 @@ export function CreateEvent(props: Props) {
 
     return (
         <div className="component">
-
             <h1>Create event</h1>
 
             <label>
-            Title
+                Title
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
             </label>
             <label>

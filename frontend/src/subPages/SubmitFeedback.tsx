@@ -18,7 +18,6 @@ export function SubmitFeedback(props: Props) {
 
     return (
         <div className="component">
-
             <h1>Submit feedback</h1>
 
             <textarea value={feedback} onChange={(e) => setFeedback(e.target.value)}/>

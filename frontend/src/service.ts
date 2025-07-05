@@ -1,3 +1,5 @@
+export const API_URL = process.env.REACT_APP_API_URL;
+
 export interface Event {
     id: number,
     title: string,
@@ -20,7 +22,7 @@ export const service = {
             description: description
         }
 
-        await fetch("http://localhost:8080/eventSync/events", {
+        await fetch(API_URL + "/events", {
             method: "POST",
             headers: { "Content-type": "application/json"},
             body: JSON.stringify(body)
@@ -29,13 +31,13 @@ export const service = {
 
     getEvents: async (): Promise<Event[]> => {
 
-        const response = await fetch("http://localhost:8080/eventSync/events");
+        const response = await fetch(API_URL + "/events");
         return await response.json();
     },
 
     submitFeedback: async (eventId: number, feedback: string) => {
 
-        await fetch(`http://localhost:8080/eventSync/events/${eventId}/feedback`, {
+        await fetch(API_URL + `/events/${eventId}/feedback`, {
             method: "Post",
             headers: { "Content-type": "text/plain"},
             body: feedback
@@ -44,7 +46,7 @@ export const service = {
 
     getSummary: async (eventId: number): Promise<Summary> => {
 
-        const response = await fetch(`http://localhost:8080/eventSync/events/${eventId}/summary`);
+        const response = await fetch(API_URL + `/events/${eventId}/summary`);
         return await response.json();
     }
 }

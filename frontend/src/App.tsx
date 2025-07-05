@@ -25,6 +25,7 @@ function App() {
 
   return (
     <div className="App">
+
       {showCreateEvent ? (
         <CreateEvent
             close={() => {setShowCreateEvent(false); loadEvents();}}
@@ -42,6 +43,7 @@ function App() {
       ) : (
         <div className="component">
             <h1> Events </h1>
+
             <button className="button" onClick={() => setShowCreateEvent(true)}>
                 Create Event
             </button>

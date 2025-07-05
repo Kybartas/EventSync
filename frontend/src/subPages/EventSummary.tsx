@@ -24,7 +24,6 @@ export function EventSummary(props: Props) {
 
     return (
         <div className="component">
-
             <h1>{props.event.title} summary</h1>
 
             <div>
@@ -32,7 +31,6 @@ export function EventSummary(props: Props) {
                 <h2 className="positive"> Positive submissions: {summary.positive}</h2>
                 <h2 className="negative">Negative submissions: {summary.negative}</h2>
                 <h2> Neutral submissions: {summary.neutral}</h2>
-
             </div>
 
             <div className="bottom-buttons">
