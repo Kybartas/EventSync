@@ -14,13 +14,16 @@
    git clone https://github.com/Kybartas/EventSync
    ```
 
-2. **Navigate to the project directory**
-    ```
-    cd EventSync
-    ```
+2. **Enter Hugging Face token**
+
+   At `EventSync/src/main/resources/application.properties`
+
+   Replace `TOKEN_HERE` with your Hugging Face token (make calls to inference roviders enabled)
+
 
 3. **Start the application (make sure Docker desktop is running)**
    ```bash
+   cd EventSync
    docker compose up --build
    ```
 
