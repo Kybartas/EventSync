@@ -1,9 +1,9 @@
-import {Event, service, Summary} from "../service";
 import {useEffect, useState} from "react";
+import {Event, service, Summary} from "../service";
 
 type Props = {
     event: Event;
-    close: () => void;
+    onClose: () => void;
 }
 
 export function EventSummary(props: Props) {
@@ -34,7 +34,7 @@ export function EventSummary(props: Props) {
             </div>
 
             <div className="bottom-buttons">
-                <button className="button" onClick={props.close}>
+                <button className="button" onClick={props.onClose}>
                     Cancel
                 </button>
             </div>

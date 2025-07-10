@@ -3,7 +3,7 @@ import {Event, service} from "../service";
 
 type Props = {
     event: Event;
-    close: () => void;
+    onClose: () => void;
 }
 
 export function SubmitFeedback(props: Props) {
@@ -13,7 +13,7 @@ export function SubmitFeedback(props: Props) {
     const handleSubmitFeedback = async () => {
 
         await service.submitFeedback(props.event.id, feedback);
-        props.close();
+        props.onClose();
     }
 
     return (
@@ -23,7 +23,7 @@ export function SubmitFeedback(props: Props) {
             <textarea value={feedback} onChange={(e) => setFeedback(e.target.value)}/>
 
             <div className="bottom-buttons">
-                <button className="button" onClick={props.close}>
+                <button className="button" onClick={props.onClose}>
                     Cancel
                 </button>
                 <button className="button" onClick={handleSubmitFeedback}>

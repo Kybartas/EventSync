@@ -2,7 +2,7 @@ import {useState} from "react";
 import {service} from "../service";
 
 type Props = {
-    close: () => void;
+    onClose: () => void;
 }
 
 export function CreateEvent(props: Props) {
@@ -13,7 +13,7 @@ export function CreateEvent(props: Props) {
     const handleCreateEvent = async () => {
 
         await service.createEvent(title, description);
-        props.close();
+        props.onClose();
     }
 
     return (
@@ -30,7 +30,7 @@ export function CreateEvent(props: Props) {
             </label>
 
             <div className="bottom-buttons">
-                <button className="button" onClick={props.close}>
+                <button className="button" onClick={props.onClose}>
                     Cancel
                 </button>
                 <button className="button" onClick={handleCreateEvent}>
