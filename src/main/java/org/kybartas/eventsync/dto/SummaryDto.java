@@ -10,8 +10,8 @@ public class SummaryDto {
     private final int neutral;
     private final int negative;
 
-    public SummaryDto(int total, int positive, int neutral, int negative) {
-        this.total = total;
+    public SummaryDto(int positive, int neutral, int negative) {
+        this.total = positive + neutral + negative;
         this.positive = positive;
         this.neutral = neutral;
         this.negative = negative;

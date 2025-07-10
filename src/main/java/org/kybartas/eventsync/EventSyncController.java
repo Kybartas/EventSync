@@ -1,7 +1,7 @@
 package org.kybartas.eventsync;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.kybartas.eventsync.dto.EventDto;
+import org.kybartas.eventsync.dto.CreateEventDto;
 import org.kybartas.eventsync.dto.SummaryDto;
 import org.kybartas.eventsync.entity.Event;
 import org.kybartas.eventsync.entity.Feedback;
@@ -22,13 +22,13 @@ public class EventSyncController {
 
     @PostMapping(value = "/events", consumes = "application/json")
     public ResponseEntity<Event> createEvent(
-            @RequestBody EventDto eventDto) {
+            @RequestBody CreateEventDto createEventDto) {
 
-        Event event = service.createEvent(eventDto);
+        Event event = service.createEvent(createEventDto);
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping("/events")
+    @GetMapping(value = "/events")
     public ResponseEntity<List<Event>> getEvents() {
 
         List<Event> events = service.getEvents();
@@ -44,7 +44,7 @@ public class EventSyncController {
         return ResponseEntity.ok(feedback);
     }
 
-    @GetMapping("events/{eventId}/summary")
+    @GetMapping(value = "events/{eventId}/summary")
     public ResponseEntity<SummaryDto> getSummary(
             @PathVariable String eventId) {
 

@@ -2,7 +2,7 @@ package org.kybartas.eventsync;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.kybartas.eventsync.dto.EventDto;
+import org.kybartas.eventsync.dto.CreateEventDto;
 import org.kybartas.eventsync.entity.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,8 +30,8 @@ public class EventSyncIntegrationTest {
     public void testFullEventFlow() throws Exception {
 
         // 1. Create an event
-        EventDto eventDto = new EventDto("Test Event", "Test Description");
-        String eventJson = objectMapper.writeValueAsString(eventDto);
+        CreateEventDto createEventDto = new CreateEventDto("Test Event", "Test Description");
+        String eventJson = objectMapper.writeValueAsString(createEventDto);
 
         String responseJson = mvc.perform(post("/eventSync/events")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -69,8 +69,8 @@ public class EventSyncIntegrationTest {
     @Test
     public void testCreateEvent_NoTitle_ReturnsBadRequest() throws Exception {
 
-        EventDto eventDto = new EventDto("", "Test Description");
-        String eventJson = objectMapper.writeValueAsString(eventDto);
+        CreateEventDto createEventDto = new CreateEventDto("", "Test Description");
+        String eventJson = objectMapper.writeValueAsString(createEventDto);
 
         mvc.perform(post("/eventSync/events")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -81,8 +81,8 @@ public class EventSyncIntegrationTest {
     @Test
     public void testCreateEvent_NoDescription_ReturnsBadRequest() throws Exception {
 
-        EventDto eventDto = new EventDto("Test Event", "");
-        String eventJson = objectMapper.writeValueAsString(eventDto);
+        CreateEventDto createEventDto = new CreateEventDto("Test Event", "");
+        String eventJson = objectMapper.writeValueAsString(createEventDto);
 
         mvc.perform(post("/eventSync/events")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -93,8 +93,8 @@ public class EventSyncIntegrationTest {
     @Test
     public void testCreateEvent_NoTitleNoDescription_ReturnsBadRequest() throws Exception {
 
-        EventDto eventDto = new EventDto("", "");
-        String eventJson = objectMapper.writeValueAsString(eventDto);
+        CreateEventDto createEventDto = new CreateEventDto("", "");
+        String eventJson = objectMapper.writeValueAsString(createEventDto);
 
         mvc.perform(post("/eventSync/events")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -115,8 +115,8 @@ public class EventSyncIntegrationTest {
     public void testAddFeedback_NoText_ReturnsBadRequest() throws Exception {
 
         // Careful not to trigger exception from invalidId instead of no text
-        EventDto eventDto = new EventDto("Test Event", "Test Description");
-        String eventJson = objectMapper.writeValueAsString(eventDto);
+        CreateEventDto createEventDto = new CreateEventDto("Test Event", "Test Description");
+        String eventJson = objectMapper.writeValueAsString(createEventDto);
         for(int i = 0; i < 3; i++) {
             mvc.perform(post("/eventSync/events")
                             .contentType(MediaType.APPLICATION_JSON)

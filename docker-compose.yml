@@ -1,13 +1,13 @@
 services:
   backend:
     build: .
-    container_name: eventsync-backend
+    container_name: EventSync-backend
     ports:
       - "8080:8080"
 
   frontend:
     build: ./frontend
-    container_name: eventsync-frontend
+    container_name: EventSync-frontend
     environment:
       - REACT_APP_API_URL=http://localhost:8080
     ports:

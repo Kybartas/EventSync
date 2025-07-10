@@ -3,12 +3,12 @@ package org.kybartas.eventsync.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "To accept a clean 2-param json for event creation")
-public class EventDto {
+public class CreateEventDto {
 
     private final String title;
     private final String description;
 
-    public EventDto(String title, String description) {
+    public CreateEventDto(String title, String description) {
         this.title = title;
         this.description = description;
     }

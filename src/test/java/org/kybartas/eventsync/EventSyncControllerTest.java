@@ -2,7 +2,7 @@ package org.kybartas.eventsync;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kybartas.eventsync.dto.EventDto;
+import org.kybartas.eventsync.dto.CreateEventDto;
 import org.kybartas.eventsync.dto.SummaryDto;
 import org.kybartas.eventsync.entity.Event;
 import org.kybartas.eventsync.entity.Feedback;
@@ -62,7 +62,7 @@ public class EventSyncControllerTest {
         
         String eventJson = "{\"title\":\"Test Event\",\"description\":\"Test Description\"}";
 
-        when(service.createEvent(any(EventDto.class))).thenReturn(testEvent);
+        when(service.createEvent(any(CreateEventDto.class))).thenReturn(testEvent);
 
         mvc.perform(post("/eventSync/events")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +89,7 @@ public class EventSyncControllerTest {
     public void testGetSummary_ReturnsSummary() throws Exception {
 
         long eventId = 1L;
-        SummaryDto expectedSummary = new SummaryDto(3, 1, 1, 1);
+        SummaryDto expectedSummary = new SummaryDto(1, 1, 1);
 
         when(service.getSummary(eventId)).thenReturn(expectedSummary);
 

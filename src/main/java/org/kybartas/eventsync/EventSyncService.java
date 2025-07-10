@@ -1,11 +1,12 @@
 package org.kybartas.eventsync;
 
-import org.kybartas.eventsync.dto.EventDto;
+import org.kybartas.eventsync.dto.CreateEventDto;
 import org.kybartas.eventsync.dto.SummaryDto;
 import org.kybartas.eventsync.entity.Event;
 import org.kybartas.eventsync.entity.Feedback;
 import org.kybartas.eventsync.repository.EventRepository;
 import org.kybartas.eventsync.repository.FeedbackRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
@@ -14,7 +15,6 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 @Service
 public class EventSyncService {
@@ -22,12 +22,18 @@ public class EventSyncService {
     private final EventRepository eventRepository;
     private final FeedbackRepository feedbackRepository;
 
+    @Value("${huggingface.api.url}")
+    private String huggingfaceUrl;
+
+    @Value("${huggingface.api.token}")
+    private String huggingfaceToken;
+
     public EventSyncService(EventRepository eventRepository, FeedbackRepository feedbackRepository) {
         this.eventRepository = eventRepository;
         this.feedbackRepository = feedbackRepository;
     }
 
-    public Event createEvent(EventDto eventData) {
+    public Event createEvent(CreateEventDto eventData) {
 
         if(eventData.getTitle().isEmpty() || eventData.getDescription().isEmpty()) {
             throw new IllegalArgumentException("Event title and description are required");
@@ -69,64 +75,60 @@ public class EventSyncService {
         }
 
         List<Feedback> eventFeedback = feedbackRepository.findAllByEvent_Id(eventId);
+        int positive = 0, neutral = 0, negative = 0;
 
-        int total = 0, positive = 0, neutral = 0, negative = 0;
         for(Feedback feedback : eventFeedback) {
 
-            String sentiment = feedback.getSentiment();
-            total = total + 1;
-            if (Objects.equals(sentiment, "positive")) {
-                positive = positive + 1;
-            } else if (Objects.equals(sentiment, "neutral")) {
-                neutral = neutral + 1;
-            } else if (Objects.equals(sentiment, "negative")) {
-                negative = negative + 1;
+            switch (feedback.getSentiment()) {
+                case "positive" -> positive++;
+                case "neutral" -> neutral++;
+                case "negative" -> negative++;
             }
         }
 
-        return new SummaryDto(total, positive, neutral, negative);
+        return new SummaryDto(positive, neutral, negative);
     }
 
     // external api response looks like this:
-    // [{"label":"LABEL_0","score":0.8936647772789001},
+    // [[{"label":"LABEL_0","score":0.8936647772789001},
     // {"label":"LABEL_1","score":0.09478294849395752},
-    // {"label":"LABEL_2","score":0.011552193202078342}]
-    // 0 -> negative, 1 -> neutral, 2 -> positive
+    // {"label":"LABEL_2","score":0.011552193202078342}]]
+    // LABEL_0 == negative, LABEL_1 == neutral, LABEL_2 == positive
     private String fetchSentiment(String input) {
-        
-        String url = "https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment";
-        String token = "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";
 
         RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
+
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(token);
+        headers.setBearerAuth(huggingfaceToken);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
         JSONObject body = new JSONObject();
         body.put("inputs", input);
 
         HttpEntity<String> entity = new HttpEntity<>(body.toString(), headers);
-
-        ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(huggingfaceUrl, entity, String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            JSONArray outer = new JSONArray(response.getBody());
-            JSONArray inner = outer.getJSONArray(0);
 
+            JSONArray results = new JSONArray(response.getBody()).getJSONArray(0);
+            String maxScoreLabel = "";
             double maxScore = -1;
-            String bestLabel = "";
-            for (int i = 0; i < inner.length(); i++) {
-                JSONObject obj = inner.getJSONObject(i);
-                double score = obj.getDouble("score");
-                if (score > maxScore) {
-                    maxScore = score;
-                    bestLabel = obj.getString("label");
+
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject result = results.getJSONObject(i);
+                String resultLabel = result.getString("label");
+                double resultScore = result.getDouble("score");
+
+                if (resultScore > maxScore) {
+                    maxScore = resultScore;
+                    maxScoreLabel = resultLabel;
                 }
             }
-            return mapLabel(bestLabel);
+
+            return mapLabel(maxScoreLabel);
         }
+
         return "unknown";
     }
 
