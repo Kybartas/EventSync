@@ -18,7 +18,7 @@
 
    At `EventSync/src/main/resources/application.properties`
 
-   Replace `TOKEN_HERE` with your Hugging Face token (make calls to inference roviders enabled)
+   Replace `TOKEN_HERE` with your [Hugging Face token](https://huggingface.co/settings/tokens) (make calls to inference providers enabled)
 
 
 3. **Start the application (make sure Docker desktop is running)**
