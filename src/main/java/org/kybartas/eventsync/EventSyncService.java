@@ -8,6 +8,7 @@ import org.kybartas.eventsync.repository.EventRepository;
 import org.kybartas.eventsync.repository.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
 import org.json.JSONArray;
@@ -97,8 +98,8 @@ public class EventSyncService {
     private String fetchSentiment(String input) {
 
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
 
+        HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(huggingfaceToken);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -107,9 +108,21 @@ public class EventSyncService {
         body.put("inputs", input);
 
         HttpEntity<String> entity = new HttpEntity<>(body.toString(), headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(huggingfaceUrl, entity, String.class);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.postForEntity(huggingfaceUrl, entity, String.class);
+        } catch (HttpClientErrorException e) {
+            System.out.println("HUGGING FACE ACCESS EXCEPTION (check key): ");
+            System.out.println(e.getMessage());
+            return "unknown";
+        } catch (Exception e) {
+            System.out.println("UNEXPECTED HUGGING FACE EXCEPTION");
+            System.out.println(e.getMessage());
+            return "unknown";
+        }
+
+        if(response.getStatusCode() == HttpStatus.OK) {
 
             JSONArray results = new JSONArray(response.getBody()).getJSONArray(0);
             String maxScoreLabel = "";
